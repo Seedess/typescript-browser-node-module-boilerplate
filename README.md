@@ -30,7 +30,7 @@ Development with Webpack Dev Server.
 ### Use Git
 
 ```bash
-git clone https://bitbucket.org/treks/treks-fullpage-scroll/
+git clone git@github.com:Seedess/typescript-browser-node-module-boilerplate.git
 ```
 
 ## How to develop or build a module?
