@@ -1,0 +1,130 @@
+<div href="#" class="fullpage-scroll-arrow-down fade-out animate-bounce"></div>
+
+<style type="text/css">
+
+.fullpage-scroll-arrow-down {
+    cursor: pointer;
+    text-decoration: none;
+    position: fixed;
+    right: 50%;
+    bottom: 10px;
+    display: inline-block;
+    z-index: 9;
+    width: 35px;
+    height: 35px;
+    font-size: 22px;
+    color: #fff;
+    line-height: .5;
+    background: transparent;
+    border-radius: 3px;
+    visibility: hidden;
+    opacity: 0;
+    padding: 10.5px;
+    -webkit-transform: translate3d(0,50px,0);
+    -moz-transform: translate3d(0,50px,0);
+    transform: translate3d(0,50px,0);
+    transition-duration: 300ms;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.7,1,0.7,1);
+}
+
+.fullpage-scroll-arrow-down:after {
+    font-family: 'ff-font-awesome' !important;
+    color: #68a1c9;
+    text-align: center;
+    content: "\f107";
+    vertical-align: top;
+}
+
+.fullpage-scroll-arrow-down.is-visible {
+    visibility: visible;
+    opacity: .6;
+    -webkit-transform: translate3d(0,0,0);
+    -moz-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+    transition-duration: 300ms;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.7,1,0.7,1);
+}
+
+.fullpage-scroll-arrow-down.fade-out {
+    opacity: .4;
+}
+
+.fullpage-scroll-arrow-down.fade-out:hover {
+    opacity: 1;
+}
+
+.animate-bounce {
+  animation-name: bounce;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes bounce {
+  0%,
+  100%,
+  20%,
+  50%,
+  80% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(6px);
+  }
+  60% {
+    transform: translateY(3px);
+  }
+}
+
+</style>
+
+<script src="https://treks.com/modules/ModuleLoader/dist/loader.js"></script>
+<script>
+
+    // https://treks.com/modules/scrollable/public/dist/scrollable.bundle.js
+
+function initiateScrollable(ScrollableJS) {
+
+    if (jQuery(window).width() < 992) return // disable for mobile
+
+    // fullpage heights for sections 1-9
+    Array.from(document.querySelectorAll('.fg-section')).slice(1, 9)
+    .forEach(section => section.style.height = '100vh')
+
+    // attach scrollable to page sections
+    var container = document.querySelector('.page-wrapper .post-content')
+    var pages = Array.from(document.querySelectorAll('.fg-section'))
+    .slice(1).slice(0, -1) // remove first and last pane
+    var scollable = new ScrollableJS(container, pages)
+    jQuery(window).on('beforeunload', function() {
+    scollable.destroy()
+    })
+
+    // arrow down
+    var arrow = jQuery('.fullpage-scroll-arrow-down').clone().addClass('is-visible')
+    jQuery(document.body).append(arrow)
+    arrow.on('click', function(event) {
+        event.preventDefault()
+        scollable.triggerScroll(1)
+    })
+    jQuery(window).scroll(function() {
+        var win = jQuery(window)
+        if (win.scrollTop() > win.height()) {
+            arrow.removeClass('animate-bounce')
+        } else {
+            arrow.addClass('animate-bounce')
+        }
+    })
+
+}
+
+const scrollableLoaded = TreksModuleLoader.requireAsync('scrollable@latest')
+jQuery(document).ready(function() {
+    scrollableLoaded.then(function(ScrollableJS) {
+        initiateScrollable(ScrollableJS)
+    })
+})
+
+// fullpage scroll end
+</script>
